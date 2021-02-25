@@ -79,8 +79,8 @@ function Home({navigation,route}) {
                            value={search}
                     />
 
-                    <TouchableOpacity onPress={() => navigation.navigate('resultBySearch')} style={{position:'absolute' , right:15 , top:13}}>
-                        <Image source={require("../../assets/images/search.png")} style={[styles.icon17]} resizeMode={'cover'} />
+                    <TouchableOpacity onPress={() => navigation.navigate('resultBySearch' , {search})} style={{position:'absolute' , right:15 , top:13}}>
+                        <Image source={require("../../assets/images/searchWhite.png")} style={[styles.icon17]} resizeMode={'cover'} />
                     </TouchableOpacity>
                 </View>
 
@@ -92,7 +92,7 @@ function Home({navigation,route}) {
                            banners && (banners).length > 0?
 
                                <Swiper key={2} dotStyle={styles.eventdoteStyle} activeDotStyle={styles.eventactiveDot}
-                                       containerStyle={styles.eventswiper} showsButtons={false} autoplay={true}>
+                                       containerStyle={styles.eventswiper} showsPagination={false} showsButtons={false} autoplay={true}>
 
 
                                    {

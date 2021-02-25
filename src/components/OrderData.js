@@ -17,6 +17,7 @@ import {sendOrder, getDeliveryPrice , sendSpecialOrder} from '../actions';
 import Header from '../common/Header';
 import COLORS from "../consts/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import RNPickerSelect from 'react-native-picker-select';
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
@@ -34,8 +35,11 @@ function OrderData({navigation,route}) {
     const details = route.params.details ? route.params.details : null;
     const [payType, setPayType] = useState('cash');
     const [cityName, setCityName]       = useState('');
+    const [friendName, setFriendName]       = useState('');
+    const [friendPhone, setFriendPhone]       = useState('');
     const deliveryPrice = useSelector(state => state.cart.deliveryPrice);
 
+    const [receiveWay, setReceiveWay] = useState('delegate');
     const [isDatePickerVisible , setIsDatePickerVisible ] = useState(false);
     const [date , setDate ] = useState('');
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
@@ -178,18 +182,85 @@ function OrderData({navigation,route}) {
                     <KeyboardAvoidingView style={[styles.Width_100]}>
                         <Form style={[styles.Width_100 , styles.flexCenter]}>
 
-                            <Item style={[styles.item]}>
-                                <Label style={[styles.label]}>{ i18n.t('deliveryLoc') }</Label>
-                                <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
-                                       value={cityName ? cityName : ''}
-                                       disabled={true}
-                                />
-                                <TouchableOpacity onPress={() => navigation.navigate('getLocation', { pathName: 'orderData' , latitude:mapRegion.latitude , longitude : mapRegion.longitude})} style={[{position:'absolute' , right:10  , bottom:13}]}>
-                                    <Icon type={'FontAwesome'} name={"map-marker"}
-                                          style={[styles.textSize_18,styles.text_gray]} />
-                                </TouchableOpacity>
+                            <Label style={[styles.label]}>{ i18n.t('appropriateReceive') }</Label>
 
-                            </Item>
+                            <View style={[styles.input, styles.marginBottom_25 , {paddingRight:10 , paddingLeft:5 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}>
+                                <RNPickerSelect
+                                    style={{
+                                        inputAndroid: {
+                                            fontFamily: 'cairo',
+                                            color:COLORS.gray,
+                                            textAlign           : I18nManager.isRTL ? 'right' : 'left',
+                                            fontSize            : 14,
+                                        },
+                                        inputIOS: {
+                                            fontFamily: 'cairo',
+                                            color:COLORS.gray,
+                                            alignSelf:'flex-start',
+                                            textAlign           : I18nManager.isRTL ? 'right' : 'left',
+                                            fontSize            : 14,
+                                        },
+                                    }}
+                                    placeholder={{
+                                        label: i18n.t('appropriateReceive') ,
+                                    }}
+                                    onValueChange={(receiveWay) => setReceiveWay(receiveWay)}
+                                    items={[
+                                        { label: i18n.t('byDelegate') , value: 'delegate' },
+                                        { label: i18n.t('sendToFriend') , value: 'friend' },
+                                        { label: i18n.t('pickFromStore') , value: 'store' },
+                                    ]}
+                                    Icon={() => {
+                                        return <Image source={require('../../assets/images/dropdown_arrow.png')} style={[styles.icon15 , {top: isIOS ? 7 : 18}]} resizeMode={'contain'} />
+                                    }}
+                                    value={receiveWay}
+                                />
+
+                            </View>
+
+
+                            {
+                                receiveWay !=='store' ?
+                                    <Item style={[styles.item]}>
+                                        <Label style={[styles.label]}>{ i18n.t('deliveryLoc') }</Label>
+                                        <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
+                                               value={cityName ? cityName : ''}
+                                               disabled={true}
+                                        />
+                                        <TouchableOpacity onPress={() => navigation.navigate('getLocation', { pathName: 'orderData' , latitude:mapRegion.latitude , longitude : mapRegion.longitude})} style={[{position:'absolute' , right:10  , bottom:13}]}>
+                                            <Icon type={'FontAwesome'} name={"map-marker"}
+                                                  style={[styles.textSize_18,styles.text_gray]} />
+                                        </TouchableOpacity>
+
+                                    </Item>
+                                    :
+                                    null
+
+                            }
+
+                            {
+                                receiveWay ==='friend' ?
+                                    <>
+                                        <Item style={[styles.item]}>
+                                            <Label style={[styles.label]}>{ i18n.t('friendName') }</Label>
+                                            <Input style={[styles.input , {paddingRight:15 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
+                                                   onChangeText={(friendName) => setFriendName(friendName)}
+                                            />
+                                        </Item>
+                                        <Item style={[styles.item]}>
+                                            <Label style={[styles.label]}>{ i18n.t('friendPhone') }</Label>
+                                            <Input style={[styles.input , {paddingRight:15 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
+                                                   onChangeText={(friendPhone) => setFriendPhone(friendPhone)}
+                                                   keyboardType={'number-pad'}
+                                            />
+                                        </Item>
+                                    </>
+                                    :
+                                    null
+
+                            }
+
+
 
 
                             {
@@ -242,29 +313,57 @@ function OrderData({navigation,route}) {
 
                             }
 
+                            {
+                                receiveWay !=='store' ?
+                                    <Item style={[styles.item]}>
+                                        <Label style={[styles.label]}>{ i18n.t('deliveryTime') }</Label>
+                                        <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
+                                               value={timeDelivery}
+                                               disabled={true}
+                                        />
+                                        <TouchableOpacity onPress={showDeliveryTimePicker} style={[{position:'absolute' , right:10  , bottom:13}]}>
+                                            <Icon type={'AntDesign'} name={"clockcircleo"}
+                                                  style={[styles.textSize_18,styles.text_gray]} />
+                                        </TouchableOpacity>
+
+                                        <DateTimePickerModal
+                                            isVisible={isDeliveryTimePickerVisible}
+                                            mode="time"
+                                            date={new Date()}
+                                            onConfirm={handleConfirmTimeDelivery}
+                                            onCancel={hideDeliveryTimePicker}
+                                        />
 
 
-                            <Item style={[styles.item]}>
-                                <Label style={[styles.label]}>{ i18n.t('deliveryTime') }</Label>
-                                <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
-                                       value={timeDelivery}
-                                       disabled={true}
-                                />
-                                <TouchableOpacity onPress={showDeliveryTimePicker} style={[{position:'absolute' , right:10  , bottom:13}]}>
-                                    <Icon type={'AntDesign'} name={"clockcircleo"}
-                                          style={[styles.textSize_18,styles.text_gray]} />
-                                </TouchableOpacity>
+                                    </Item>
 
-                                <DateTimePickerModal
-                                    isVisible={isDeliveryTimePickerVisible}
-                                    mode="time"
-                                    date={new Date()}
-                                    onConfirm={handleConfirmTimeDelivery}
-                                    onCancel={hideDeliveryTimePicker}
-                                />
+                                    :
+                                    null
+
+                            }
+
+                            {
+                                receiveWay ==='store' ?
+
+                                    <>
+                                        <Text style={[styles.textRegular, styles.marginBottom_15 , styles.text_gray , styles.textSize_14 , styles.alignStart]}>{i18n.t('deliveryLoc') }</Text>
+
+                                        <View style={[styles.directionRow, styles.marginBottom_25 , styles.Width_100, {flexWrap:'wrap'}]}>
+                                            <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_14 , styles.text_darkRed , {marginRight:5}]} />
+                                            <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_13]}>الرياض</Text>
+                                            <TouchableOpacity onPress={() =>  navigation.navigate('getLocation' , {pathName:'orderDetails' , latitude: 31.2587 ,
+                                                longitude:32.2988})} style={{marginLeft:5}}>
+                                                <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_13]}>( { i18n.t('seeLocation') } )</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </>
+
+                                    :
+                                    null
+
+                            }
 
 
-                            </Item>
 
                             <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 ,styles.marginBottom_25 , styles.alignStart]}>{ i18n.t('selectPayMethod') }</Text>
 
@@ -284,9 +383,17 @@ function OrderData({navigation,route}) {
 
                             </View>
 
-                            <View style={[styles.bg_lightdarkRed , styles.Width_100 ,styles.paddingHorizontal_15  , styles.height_45 , styles.directionRowSpace , styles.marginTop_20]}>
-                                <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14 ]}>{i18n.t('deliveryPrice') }  :  {deliveryPrice && cityName? deliveryPrice.delivery : 0} {i18n.t('RS') }</Text>
-                            </View>
+
+                            {
+                                receiveWay !=='store' ?
+                                    <View style={[styles.bg_lightdarkRed , styles.Width_100 ,styles.paddingHorizontal_15  , styles.height_45 , styles.directionRowSpace , styles.marginTop_20]}>
+                                        <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14 ]}>{i18n.t('deliveryPrice') }  :  {deliveryPrice && cityName? deliveryPrice.delivery : 0} {i18n.t('RS') }</Text>
+                                    </View>
+
+                                    :
+                                    null
+
+                            }
 
                             {
                                renderSubmit()

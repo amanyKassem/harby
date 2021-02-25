@@ -237,6 +237,20 @@ const en = {
     'carNumbers'                : 'License plate numbers',
     'totalPrice'                : 'The total price of the order',
     'purchasePrice'             : 'Purchase price',
+    'searchByList'              : 'Search by list',
+    'searchByMap'               : 'Search by Map',
+    'appropriateReceive'        : 'The appropriate way to receive',
+    'byDelegate'                : 'By delegate',
+    'sendToFriend'              : 'Send to friend',
+    'pickFromStore'             : 'Pick up from the store',
+    'friendName'                : 'Your friend\'s name',
+    'friendPhone'               : 'Your friend\'s mobile',
+    'transferToFriend'          : 'Transfer to your friend',
+    'balanceTransfer'           : 'Balance transfer',
+    'transferAmount'            : 'Transfer amount',
+    'creditSent'                : 'The credit has been sent to your friend',
+    'clientsComments'           : 'Clients comments',
+    'sum'                       : 'Sum',
 };
 
 export default en;

@@ -76,6 +76,17 @@ function Wallet({navigation,route}) {
                     </TouchableOpacity>
 
                     {
+                        user && user.user_type !== 3 ?
+                            <TouchableOpacity onPress={() => navigation.navigate('transferToFriend')} style={[styles.height_40 , styles.bg_darkRed , styles.Radius_5 , styles.Width_100, styles.centerContext , styles.marginTop_15]}>
+                                <Text style={[styles.textBold , styles.text_White , styles.textSize_15, styles.textCenter ]}>{ i18n.t('transferToFriend') }</Text>
+                            </TouchableOpacity>
+                            :
+                            null
+                    }
+
+
+
+                    {
                         user && user.user_type === 3 ?
                             <TouchableOpacity onPress={() => navigation.navigate('recharge',{title:i18n.t('recoverBalance')})} style={[styles.height_40 , styles.bg_darkRed , styles.Radius_5 , styles.Width_100, styles.centerContext , styles.marginTop_10]}>
                                 <Text style={[styles.textBold , styles.text_White , styles.textSize_15, styles.textCenter ]}>{ i18n.t('recoverBalance') }</Text>

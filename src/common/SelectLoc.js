@@ -51,7 +51,7 @@ function SelectLoc({navigation,route}) {
             userLocation = { latitude, longitude , latitudeDelta , longitudeDelta};
 
             setMapRegion(userLocation);
-            isIOS ? mapRef.current.animateToRegion(userLocation, 1000) : false;
+            // isIOS ? mapRef.current.animateToRegion(userLocation, 1000) : false;
         }
     }
 

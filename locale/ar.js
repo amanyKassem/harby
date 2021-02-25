@@ -240,6 +240,20 @@ const ar = {
     'chooseLocation'            : 'اختر العنوان',
     'locationName'              : 'اسم العنوان',
     'save'                      : 'حفظ',
+    'searchByList'              : 'البحث بالقائمة',
+    'searchByMap'               : 'البحث بالخريطة',
+    'appropriateReceive'        : 'الطريقة المناسبة للاستلام',
+    'byDelegate'                : 'عن طريق مندوب',
+    'sendToFriend'              : 'ارسال الي صديق',
+    'pickFromStore'             : 'الاستلام من المحل',
+    'friendName'                : 'اسم صديقك',
+    'friendPhone'               : 'جوال صديقك',
+    'transferToFriend'          : 'تحويل لصديقك',
+    'balanceTransfer'           : 'تحويل رصيد',
+    'transferAmount'            : 'مبلغ التحويل',
+    'creditSent'                : 'تم ارسال الرصيد الي صديقك',
+    'clientsComments'           : 'تعليقات العملاء',
+    'sum'                       : 'المجموع',
 };
 
 export default ar;

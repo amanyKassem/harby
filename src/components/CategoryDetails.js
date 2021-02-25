@@ -134,7 +134,7 @@ function CategoryDetails({navigation,route}) {
             {
                 providerDetails ?
                     <Content contentContainerStyle={[styles.bgFullWidth]} scrollEnabled={false}>
-                        <ImageBackground source={{uri:providerDetails.cover}} resizeMode={'cover'} style={[styles.Width_100 ,  activeType != '0'? styles.height_340 : styles.height_300]}>
+                        <ImageBackground source={{uri:providerDetails.cover}} resizeMode={'cover'} style={[styles.Width_100 ,  styles.height_300]}>
                             <View style={[styles.overlay_black , styles.heightFull , styles.Width_100]}>
 
                                 <Header navigation={navigation} title={ i18n.t('details') }  onToggleFavorite={() => onToggleFavorite(id)} likeIcon={providerDetails.is_favourite} />
@@ -146,7 +146,7 @@ function CategoryDetails({navigation,route}) {
                                     <Text style={[styles.textBold , styles.text_White , styles.textSize_14 , styles.textCenter , styles.marginBottom_5]}>{providerDetails.name}</Text>
 
                                     <View style={[styles.directionRow , styles.marginTop_5]}>
-                                        <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_14 , styles.text_darkRed , {marginRight:5}]} />
+                                        <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_14 , styles.text_yellow , {marginRight:5}]} />
                                         <Text style={[styles.textRegular , styles.text_White , styles.textSize_13]}>{providerDetails.address}</Text>
                                     </View>
 
@@ -160,16 +160,16 @@ function CategoryDetails({navigation,route}) {
                                             starSize={12}
                                             starStyle={{ marginHorizontal: 2}}
                                         />
-                                        <Text style={[styles.textRegular , styles.text_White , styles.textSize_12, {marginLeft:10}]}>{i18n.t('away')} {providerDetails.distance}</Text>
+                                        {/*<Text style={[styles.textRegular , styles.text_White , styles.textSize_12, {marginLeft:10}]}>{i18n.t('away')} {providerDetails.distance}</Text>*/}
                                     </View>
-                                    {
-                                        activeType != '0' && token?
-                                            <TouchableOpacity onPress={() => setActiveType('0')} style={[styles.mstrdaBtn , styles.Width_50 , styles.marginVertical_20]}>
-                                                <Text style={[styles.textRegular , styles.text_White , styles.textSize_15]}>{ i18n.t('addSpecialOrder') }</Text>
-                                            </TouchableOpacity>
-                                            :
-                                            null
-                                    }
+                                    {/*{*/}
+                                    {/*    activeType != '0' && token?*/}
+                                    {/*        <TouchableOpacity onPress={() => setActiveType('0')} style={[styles.mstrdaBtn , styles.Width_50 , styles.marginVertical_20]}>*/}
+                                    {/*            <Text style={[styles.textRegular , styles.text_White , styles.textSize_15]}>{ i18n.t('addSpecialOrder') }</Text>*/}
+                                    {/*        </TouchableOpacity>*/}
+                                    {/*        :*/}
+                                    {/*        null*/}
+                                    {/*}*/}
 
 
                                 </View>
@@ -206,7 +206,7 @@ function CategoryDetails({navigation,route}) {
 
                             {
                                 activeType != '0'?
-                                    <View style={[styles.marginTop_10 , styles.paddingHorizontal_20 , {height:IS_IPHONE_X ? height - 470 :  height - 400}]}>
+                                    <View style={[styles.marginTop_10 , styles.paddingHorizontal_20 , {height:IS_IPHONE_X ? height - 440 :  height - 370}]}>
                                         {
                                             providerProducts && (providerProducts).length > 0?
                                                 <FlatList

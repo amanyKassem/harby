@@ -91,9 +91,27 @@ export default function CustomDrawerContent(props) {
                     onPress={() => props.navigation.navigate('home')}
                 />
 
+                <DrawerItem
+                    style={[styles.justifyCenter , {marginHorizontal:20 }]}
+                    label={
+                        ({ focused, color }) => {
+                            return (
+                                <Text style={[styles.textRegular, focused ? styles.text_midGray : styles.text_gray , styles.textSize_15, styles.alignStart , {writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr', marginLeft:-10}]}>{ i18n.t('profile') }</Text>
+                            )
+                        }
+                    }
+                    icon={
+                        ({ focused, color }) => {
+                            return (
+                                <Image source={require('../../assets/images/user_menu.png')} style={[styles.icon20]} resizeMode={'contain'} />
+                            )
+                        }
+                    }
+                    onPress={() => props.navigation.navigate('profile')}
+                />
 
                 <DrawerItem
-                    style={[styles.marginTop_15 , styles.justifyCenter , {marginHorizontal:20 }]}
+                    style={[styles.justifyCenter , {marginHorizontal:20 }]}
                     label={
                         ({ focused, color }) => {
                             return (

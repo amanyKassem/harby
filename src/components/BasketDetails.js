@@ -130,14 +130,25 @@ function BasketDetails({navigation,route}) {
                                 />
                             </Item>
 
-                            <View style={[styles.directionRowSpace , styles.paddingHorizontal_20 , styles.bg_light_gray , styles.marginBottom_5, styles.height_45 ]}>
-                                <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}> {i18n.t('total') } </Text>
-                                <Text style={[styles.textBold , styles.text_gray, styles.textSize_14]}>{cartDetails.prices ? cartDetails.prices.total : 0} {i18n.t('RS') }</Text>
+                            <View style={[styles.directionRowSpace , styles.paddingHorizontal_20  , styles.marginBottom_5, styles.height_45  , {borderTopWidth:1 , borderColor:'#ddd'}]}>
+                                <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}> {i18n.t('sum') } </Text>
+                                <Text style={[styles.textBold , styles.text_darkRed, styles.textSize_14]}>{cartDetails.prices ? cartDetails.prices.sum : 0} {i18n.t('RS') }</Text>
                             </View>
 
-                            <View style={[styles.directionRowSpace , styles.paddingHorizontal_20 , styles.bg_light_gray , styles.height_45 ]}>
+                            <View style={[styles.directionRowSpace , styles.paddingHorizontal_20   , styles.marginBottom_5, styles.height_45 , {borderTopWidth:1 , borderColor:'#ddd'} ]}>
+                                <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}> {i18n.t('deliveryCost') } </Text>
+                                <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{cartDetails.prices ? cartDetails.prices.delivery : '0'} {i18n.t('RS') }</Text>
+                            </View>
+
+
+                            <View style={[styles.directionRowSpace , styles.paddingHorizontal_20   , styles.marginBottom_5, styles.height_45 , {borderTopWidth:1 , borderColor:'#ddd'} ]}>
                                 <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}> {i18n.t('tax') } </Text>
-                                <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{cartDetails.prices ? cartDetails.prices.added_value : '0'} {i18n.t('RS') }</Text>
+                                <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{cartDetails.prices ? cartDetails.prices.added_value : '0'} {i18n.t('RS') }</Text>
+                            </View>
+
+                            <View style={[styles.directionRowSpace , styles.paddingHorizontal_20 , styles.bg_darkRed, styles.height_45 ]}>
+                                <Text style={[styles.textBold , styles.text_White , styles.textSize_14]}> {i18n.t('total') } </Text>
+                                <Text style={[styles.textBold , styles.text_White, styles.textSize_14]}>{cartDetails.prices ? cartDetails.prices.total : 0} {i18n.t('RS') }</Text>
                             </View>
 
                             {

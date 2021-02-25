@@ -386,7 +386,7 @@ function OrderDetails({navigation,route}) {
 
                 <View style={[styles.bg_White, styles.overHidden, styles.Width_100, {borderTopStartRadius:5 , borderTopEndRadius:5}]}>
 
-                    <View style={[styles.bg_gray , styles.Width_100 , styles.paddingVertical_15 , styles.paddingHorizontal_20]}>
+                    <View style={[styles.bg_darkRed , styles.Width_100 , styles.paddingVertical_15 , styles.paddingHorizontal_20]}>
                         <Text style={[styles.textBold , styles.text_White , styles.textSize_15 , styles.alignStart]}>{ i18n.t('details') }</Text>
                     </View>
 

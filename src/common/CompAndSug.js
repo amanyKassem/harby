@@ -88,7 +88,7 @@ function CompAndSug({navigation,route}) {
 
                 <View style={[styles.bgFullWidth ,styles.bg_White, styles.Width_100,styles.paddingHorizontal_20, {overflow:'hidden'}]}>
 
-                    <Image source={require('../../assets/images/logo.png')} style={[styles.icon110 ,styles.SelfCenter , styles.marginVertical_25 ]} resizeMode={'contain'} />
+                    <Image source={require('../../assets/images/logo.png')} style={[styles.icon80 ,styles.SelfCenter , styles.marginVertical_25 ]} resizeMode={'contain'} />
 
                     <KeyboardAvoidingView style={[styles.Width_100  , styles.marginBottom_10]}>
                         <Form style={[styles.Width_100 , styles.flexCenter]}>

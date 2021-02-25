@@ -76,8 +76,8 @@ function AddUrRate({navigation,route}) {
 
                 <View style={[styles.bgFullWidth ,styles.bg_White, styles.Width_100, {overflow:'hidden'}]}>
 
-                    <View style={[styles.bg_darkRed , styles.marginTop_30 ,styles.paddingHorizontal_20 ,  styles.centerContext  , styles.height_45]}>
-                        <Text style={[styles.textBold , styles.text_White , styles.textSize_14]}>{i18n.t('restRate') }</Text>
+                    <View style={[styles.bg_yellow , styles.marginTop_30 ,styles.paddingHorizontal_20 ,  styles.centerContext  , styles.height_45]}>
+                        <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{i18n.t('restRate') }</Text>
                     </View>
 
                     <View style={[ styles.flexCenter , styles.Width_100 , styles.marginVertical_20 , styles.paddingHorizontal_20 ]}>
@@ -172,8 +172,8 @@ function AddUrRate({navigation,route}) {
 
                     </View>
 
-                    <View style={[styles.bg_darkRed , styles.marginTop_30 ,styles.paddingHorizontal_20 ,  styles.centerContext  , styles.height_45]}>
-                        <Text style={[styles.textBold , styles.text_White , styles.textSize_14]}>{i18n.t('delegateRate') }</Text>
+                    <View style={[styles.bg_yellow , styles.marginTop_30 ,styles.paddingHorizontal_20 ,  styles.centerContext  , styles.height_45]}>
+                        <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{i18n.t('delegateRate') }</Text>
                     </View>
 
                     <View style={[ styles.flexCenter , styles.Width_100 , styles.marginVertical_20 , styles.paddingHorizontal_20 ]}>
