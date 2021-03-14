@@ -243,6 +243,7 @@ const ar = {
     'searchByList'              : 'البحث بالقائمة',
     'searchByMap'               : 'البحث بالخريطة',
     'appropriateReceive'        : 'الطريقة المناسبة للاستلام',
+    'deliverWay'                : 'طريقة الاستلام',
     'byDelegate'                : 'عن طريق مندوب',
     'sendToFriend'              : 'ارسال الي صديق',
     'pickFromStore'             : 'الاستلام من المحل',

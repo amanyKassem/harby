@@ -31,6 +31,8 @@ function OrderData({navigation,route}) {
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const {type} = route.params;
     const provider_id = route.params.provider_id ? route.params.provider_id : null;
+    const providerAddress = route.params.providerAddress ? route.params.providerAddress : '';
+    const coordinates = route.params.coordinates ? route.params.coordinates : null;
     const coupon = route.params.coupon ? route.params.coupon : null;
     const details = route.params.details ? route.params.details : null;
     const [payType, setPayType] = useState('cash');
@@ -58,6 +60,7 @@ function OrderData({navigation,route}) {
 
     const dispatch = useDispatch();
 
+
     function renderSubmit() {
 
         if (isSubmitted){
@@ -68,7 +71,7 @@ function OrderData({navigation,route}) {
             )
         }
 
-        if (mapRegion.latitude == null || timeDelivery == '') {
+        if (timeDelivery == '') {
             return (
                 <View
                     style={[styles.mstrdaBtn , styles.Width_100  , styles.marginTop_55, styles.marginBottom_10 , {
@@ -99,13 +102,32 @@ function OrderData({navigation,route}) {
             })});
         }
         else{
-            dispatch(sendOrder(lang, provider_id, mapRegion.latitude , mapRegion.longitude , cityName , payType, deliveryPrice.delivery , coupon , timeDelivery, token , navigation)).
-            then(() => {setIsSubmitted(false) ; setTimeDelivery('') ; setPayType('cash') ; setCityName('') ; setMapRegion({
-                latitude: null,
-                longitude: null,
-                latitudeDelta,
-                longitudeDelta
-            })});
+            if(receiveWay === 'restaurant'){
+                dispatch(sendOrder(lang, provider_id, coordinates.latitude , coordinates.longitude , providerAddress , payType, 0 , coupon , timeDelivery , receiveWay , '' , '', token , navigation)).
+                then(() => {setIsSubmitted(false) ; setTimeDelivery('') ; setPayType('cash') ; setCityName('') ; setMapRegion({
+                    latitude: null,
+                    longitude: null,
+                    latitudeDelta,
+                    longitudeDelta
+                })});
+            }else if(receiveWay === 'friend'){
+                dispatch(sendOrder(lang, provider_id, mapRegion.latitude , mapRegion.longitude , cityName , payType, deliveryPrice.delivery , coupon , timeDelivery , receiveWay , friendName , friendPhone, token , navigation)).
+                then(() => {setIsSubmitted(false) ; setTimeDelivery('') ; setPayType('cash') ; setCityName('') ; setMapRegion({
+                    latitude: null,
+                    longitude: null,
+                    latitudeDelta,
+                    longitudeDelta
+                })});
+            } else {
+                dispatch(sendOrder(lang, provider_id, mapRegion.latitude , mapRegion.longitude , cityName , payType, deliveryPrice.delivery , coupon , timeDelivery , receiveWay, '' , '',  token , navigation)).
+                then(() => {setIsSubmitted(false) ; setTimeDelivery('') ; setPayType('cash') ; setCityName('') ; setMapRegion({
+                    latitude: null,
+                    longitude: null,
+                    latitudeDelta,
+                    longitudeDelta
+                })});
+            }
+
         }
     };
 
@@ -208,7 +230,7 @@ function OrderData({navigation,route}) {
                                     items={[
                                         { label: i18n.t('byDelegate') , value: 'delegate' },
                                         { label: i18n.t('sendToFriend') , value: 'friend' },
-                                        { label: i18n.t('pickFromStore') , value: 'store' },
+                                        { label: i18n.t('pickFromStore') , value: 'restaurant' },
                                     ]}
                                     Icon={() => {
                                         return <Image source={require('../../assets/images/dropdown_arrow.png')} style={[styles.icon15 , {top: isIOS ? 7 : 18}]} resizeMode={'contain'} />
@@ -220,7 +242,7 @@ function OrderData({navigation,route}) {
 
 
                             {
-                                receiveWay !=='store' ?
+                                receiveWay !=='restaurant' ?
                                     <Item style={[styles.item]}>
                                         <Label style={[styles.label]}>{ i18n.t('deliveryLoc') }</Label>
                                         <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
@@ -313,46 +335,39 @@ function OrderData({navigation,route}) {
 
                             }
 
-                            {
-                                receiveWay !=='store' ?
-                                    <Item style={[styles.item]}>
-                                        <Label style={[styles.label]}>{ i18n.t('deliveryTime') }</Label>
-                                        <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
-                                               value={timeDelivery}
-                                               disabled={true}
-                                        />
-                                        <TouchableOpacity onPress={showDeliveryTimePicker} style={[{position:'absolute' , right:10  , bottom:13}]}>
-                                            <Icon type={'AntDesign'} name={"clockcircleo"}
-                                                  style={[styles.textSize_18,styles.text_gray]} />
-                                        </TouchableOpacity>
+                            <Item style={[styles.item]}>
+                                <Label style={[styles.label]}>{ i18n.t('deliveryTime') }</Label>
+                                <Input style={[styles.input , {paddingRight:35 , borderTopLeftRadius: 5 , borderTopRightRadius: 5 , borderRadius: 5}]}
+                                       value={timeDelivery}
+                                       disabled={true}
+                                />
+                                <TouchableOpacity onPress={showDeliveryTimePicker} style={[{position:'absolute' , right:10  , bottom:13}]}>
+                                    <Icon type={'AntDesign'} name={"clockcircleo"}
+                                          style={[styles.textSize_18,styles.text_gray]} />
+                                </TouchableOpacity>
 
-                                        <DateTimePickerModal
-                                            isVisible={isDeliveryTimePickerVisible}
-                                            mode="time"
-                                            date={new Date()}
-                                            onConfirm={handleConfirmTimeDelivery}
-                                            onCancel={hideDeliveryTimePicker}
-                                        />
+                                <DateTimePickerModal
+                                    isVisible={isDeliveryTimePickerVisible}
+                                    mode="time"
+                                    date={new Date()}
+                                    onConfirm={handleConfirmTimeDelivery}
+                                    onCancel={hideDeliveryTimePicker}
+                                />
 
 
-                                    </Item>
-
-                                    :
-                                    null
-
-                            }
+                            </Item>
 
                             {
-                                receiveWay ==='store' ?
+                                receiveWay ==='restaurant' ?
 
                                     <>
                                         <Text style={[styles.textRegular, styles.marginBottom_15 , styles.text_gray , styles.textSize_14 , styles.alignStart]}>{i18n.t('deliveryLoc') }</Text>
 
                                         <View style={[styles.directionRow, styles.marginBottom_25 , styles.Width_100, {flexWrap:'wrap'}]}>
                                             <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_14 , styles.text_darkRed , {marginRight:5}]} />
-                                            <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_13]}>الرياض</Text>
-                                            <TouchableOpacity onPress={() =>  navigation.navigate('getLocation' , {pathName:'orderDetails' , latitude: 31.2587 ,
-                                                longitude:32.2988})} style={{marginLeft:5}}>
+                                            <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_13]}>{providerAddress}</Text>
+                                            <TouchableOpacity onPress={() =>  navigation.navigate('getLocation' , {pathName:'orderDetails' , latitude:coordinates.latitude ,
+                                                longitude:coordinates.longitude})} style={{marginLeft:5}}>
                                                 <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_13]}>( { i18n.t('seeLocation') } )</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -385,7 +400,7 @@ function OrderData({navigation,route}) {
 
 
                             {
-                                receiveWay !=='store' ?
+                                receiveWay !=='restaurant' ?
                                     <View style={[styles.bg_lightdarkRed , styles.Width_100 ,styles.paddingHorizontal_15  , styles.height_45 , styles.directionRowSpace , styles.marginTop_20]}>
                                         <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14 ]}>{i18n.t('deliveryPrice') }  :  {deliveryPrice && cityName? deliveryPrice.delivery : 0} {i18n.t('RS') }</Text>
                                     </View>

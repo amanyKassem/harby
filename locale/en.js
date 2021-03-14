@@ -240,6 +240,7 @@ const en = {
     'searchByList'              : 'Search by list',
     'searchByMap'               : 'Search by Map',
     'appropriateReceive'        : 'The appropriate way to receive',
+    'deliverWay'                : 'Deliver method',
     'byDelegate'                : 'By delegate',
     'sendToFriend'              : 'Send to friend',
     'pickFromStore'             : 'Pick up from the store',

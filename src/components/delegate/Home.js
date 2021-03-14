@@ -1,5 +1,15 @@
 import React, {useEffect, useRef, useState} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, FlatList, I18nManager, ActivityIndicator} from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    Dimensions,
+    FlatList,
+    I18nManager,
+    ActivityIndicator,
+    Vibration
+} from "react-native";
 import {Container, Content, Icon, Input} from 'native-base'
 import styles from '../../../assets/styles'
 import i18n from "../../../locale/i18n";
@@ -9,6 +19,11 @@ import Header from '../../common/Header';
 import COLORS from "../../consts/colors";
 import {getDelegateOrders , updateLocation} from "../../actions";
 import {useIsFocused} from "@react-navigation/native";
+import * as Permissions from "expo-permissions";
+import * as Location from "expo-location";
+import {Notifications} from "expo";
+const latitudeDelta = 0.922;
+const longitudeDelta = 0.521;
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
@@ -20,6 +35,13 @@ function Home({navigation,route}) {
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const delegateOrders = useSelector(state => state.orders.delegateOrders);
     const [screenLoader , setScreenLoader ] = useState(true);
+    const locFrom = route.params && route.params.locFrom ? route.params.locFrom : '';
+    const [mapRegion, setMapRegion] = useState({
+        latitude: '',
+        longitude: '',
+        latitudeDelta,
+        longitudeDelta
+    });
 
 
     const isFocused = useIsFocused();
@@ -33,11 +55,53 @@ function Home({navigation,route}) {
     }
 
     useEffect(() => {
+        Notifications.addListener(
+            _handleNotification
+        );
+    }, []);
 
-        if (isFocused) {
-            fetchData()
+    const _handleNotification = async (notification) => {
+        Vibration.vibrate();
+        let notificationId = await Notifications.presentLocalNotificationAsync({
+            title: notification.data.title,
+            body: notification.data.body,
+            ios: {
+                sound: true,
+                _displayInForeground: true
+            }
+        });
+    };
+
+    useEffect(() => {
+        const fetchLoc= async () => {
+            let { status } = await Permissions.askAsync(Permissions.LOCATION);
+            let userLocation = {};
+            if (status !== 'granted') {
+                alert('صلاحيات تحديد موقعك الحالي ملغاه');
+            } else {
+                const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync({
+                    // accuracy: Platform.OS == 'ios' ?Location.Accuracy.Lowest: Location.Accuracy.Low
+                    accuracy:  Location.Accuracy.Balanced
+                });
+                console.log('latitude', latitude)
+
+                userLocation = { latitude, longitude , latitudeDelta , longitudeDelta};
+
+                setMapRegion(userLocation);
+                console.log('setMapRegion', mapRegion.latitude)
+            }
         }
-    }, [isFocused , route.params?.latitude])
+        fetchLoc()
+        if (isFocused) {
+            if(locFrom == 'current'){
+                setScreenLoader(true);
+                dispatch(getDelegateOrders(lang , mapRegion.latitude, mapRegion.longitude, 'READY' , token)).then(() => {dispatch(updateLocation(lang ,  mapRegion.latitude, mapRegion.longitude, token)) ; setScreenLoader(false)});
+            }else{
+                fetchData()
+            }
+        }
+    }, [isFocused , route.params?.latitude , mapRegion.latitude])
+
 
 
     function Item({ name , image , date , orderNum , type , index }) {

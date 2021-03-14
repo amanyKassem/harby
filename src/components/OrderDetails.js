@@ -271,6 +271,36 @@ function OrderDetails({navigation,route}) {
                                         </View>
                                         <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.shipping} {i18n.t('RS') }</Text>
 
+                                        <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                            <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{i18n.t('deliverWay') }</Text>
+                                        </View>
+                                        <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.way_to_deliver_text}</Text>
+
+                                        {
+                                            orderDetails.friend_name ?
+                                                <>
+                                                    <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                                        <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{i18n.t('friendName') }</Text>
+                                                    </View>
+                                                    <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.friend_name}</Text>
+                                                </>
+                                                :
+                                                null
+                                        }
+
+                                        {
+                                            orderDetails.friend_phone ?
+                                                <>
+                                                    <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                                        <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{i18n.t('friendPhone') }</Text>
+                                                    </View>
+                                                    <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.friend_phone}</Text>
+                                                </>
+                                                :
+                                                null
+                                        }
+
+
                                         <View style={[styles.bg_light_gray ,styles.paddingHorizontal_20 ,  styles.directionRow  , styles.height_45]}>
                                             <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_14]}>{i18n.t('deliveryDetails') }</Text>
                                         </View>

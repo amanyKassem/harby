@@ -70,7 +70,7 @@ function ResultBySearch({navigation,route}) {
         setActive(0);
         setShowAd(false);
         setScreenLoader(true)
-        dispatch(getProviders(lang , 24, false , null , null , homeSearch)).then(() => setScreenLoader(false));
+        dispatch(getProviders(lang , null, false , null , null , homeSearch)).then(() => setScreenLoader(false));
 
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         let userLocation = {};
@@ -81,9 +81,12 @@ function ResultBySearch({navigation,route}) {
             if (route.params && route.params.latitude){
                 userLocation = { latitude: route.params.latitude, longitude:route.params.longitude , latitudeDelta , longitudeDelta};
                 // dispatch(getHomeAds(lang , route.params.latitude ,route.params.longitude  , null , token))
+                dispatch(getProviders(lang , null, false ,  route.params.latitude ,route.params.longitude , homeSearch)).then(() => setScreenLoader(false));
+
             } else {
                 userLocation = { latitude, longitude , latitudeDelta  , longitudeDelta};
-                // dispatch(getHomeAds(lang , latitude ,longitude , null , token))
+                dispatch(getProviders(lang , null, false , latitude ,longitude , homeSearch)).then(() => setScreenLoader(false));
+
             }
             setInitMap(false);
             setMapRegion(userLocation);
@@ -106,9 +109,9 @@ function ResultBySearch({navigation,route}) {
         setScreenLoader(true);
         setSearchList(keyword);
         if (keyword) {
-            dispatch(getProviders(lang , 24, false , null , null , keyword)).then(() => setScreenLoader(false));
+            dispatch(getProviders(lang , null, false , null , null , keyword)).then(() => setScreenLoader(false));
         }else{
-            dispatch(getProviders(lang , 24, false , null , null , null)).then(() => setScreenLoader(false));
+            dispatch(getProviders(lang , null, false , null , null , null)).then(() => setScreenLoader(false));
         }
     }
 
@@ -121,11 +124,12 @@ function ResultBySearch({navigation,route}) {
     const setSearchStatus = (value) => {
         setActive(value)
         setScreenLoader(true)
-        if(value === 0 ){
-            dispatch(getProviders(lang , 24, false , null , null , null)).then(() => setScreenLoader(false));
-        }else{
-            setScreenLoader(false)
-        }
+        // if(value === 0 ){
+        //     dispatch(getProviders(lang , null, false , null , null , null)).then(() => setScreenLoader(false));
+        // }else{
+        //     dispatch(getProviders(lang , null, false , null , null , null)).then(() => setScreenLoader(false));
+        // }
+        dispatch(getProviders(lang , null, false , null , null , null)).then(() => setScreenLoader(false));
     }
 
     function showAdPop(markerInfo) {
@@ -135,10 +139,10 @@ function ResultBySearch({navigation,route}) {
 
     const setSearchText = (keyword) => {
         setSearch(keyword);
-        // if(keyword)
-        //     dispatch(getHomeAds(lang , mapRegion.latitude ,mapRegion.longitude  , keyword , token))
-        // else
-        //     dispatch(getHomeAds(lang , mapRegion.latitude ,mapRegion.longitude  , null , token))
+        if(keyword)
+            dispatch(getProviders(lang , null, false ,  mapRegion.latitude ,mapRegion.longitude , keyword)).then(() => setScreenLoader(false));
+        else
+            dispatch(getProviders(lang , null, false ,  mapRegion.latitude ,mapRegion.longitude , null)).then(() => setScreenLoader(false));
     }
 
     async function getCurrentLocation() {
@@ -296,8 +300,8 @@ function ResultBySearch({navigation,route}) {
 
 
                                                 {
-                                                    homeAds ?
-                                                        homeAds.map((marker,i) => (
+                                                    providers ?
+                                                        providers.map((marker,i) => (
                                                             <MapView.Marker
                                                                 // ref={mapMarkerRef}
                                                                 key={marker.id}
@@ -306,12 +310,12 @@ function ResultBySearch({navigation,route}) {
                                                                 onPress={() => showAdPop(marker)}
                                                             >
                                                                 <Image source={require('../../assets/images/red_location.png')} resizeMode={'contain'} style={[styles.icon20]}/>
-                                                                <MapView.Callout tooltip={true} style={[styles.flexCenter]} >
-                                                                    <View style={[styles.Radius_15,styles.flexCenter ,styles.bg_gray ,styles.paddingVertical_5 , styles.paddingHorizontal_5,{minWidth:80}]}>
-                                                                        <Text style={[styles.textRegular , styles.text_White , styles.textSize_11]}>{marker.price}</Text>
-                                                                    </View>
-                                                                    <View style={[styles.talkBubbleTriangle]}/>
-                                                                </MapView.Callout>
+                                                                {/*<MapView.Callout tooltip={true} style={[styles.flexCenter]} >*/}
+                                                                {/*    <View style={[styles.Radius_15,styles.flexCenter ,styles.bg_gray ,styles.paddingVertical_5 , styles.paddingHorizontal_5,{minWidth:80}]}>*/}
+                                                                {/*        <Text style={[styles.textRegular , styles.text_White , styles.textSize_11]}>{marker.price}</Text>*/}
+                                                                {/*    </View>*/}
+                                                                {/*    <View style={[styles.talkBubbleTriangle]}/>*/}
+                                                                {/*</MapView.Callout>*/}
                                                             </MapView.Marker>
                                                         ))
                                                         :
@@ -329,7 +333,7 @@ function ResultBySearch({navigation,route}) {
                                                     <Image source={require("../../assets/images/cancel.png")} style={[styles.icon10]} resizeMode={'contain'} />
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() => navigation.navigate('categoryDetails', {id:popInfo.id , type:popInfo.type})} style={[styles.borderGray,styles.marginBottom_20 , styles.directionRow, styles.bg_White , styles.Radius_5 , {flex:1 , padding:10}]}>
-                                                    <Image source={popInfo.image} style={[styles.icon50 , styles.Radius_7]} resizeMode={'cover'} />
+                                                    <Image source={{uri:popInfo.avatar}}  style={[styles.icon50 , styles.Radius_7]} resizeMode={'cover'} />
                                                     <View style={[{marginLeft:15 , flex:1}]}>
                                                         <View style={styles.directionRowSpace}>
                                                             <Text style={[styles.textRegular , styles.text_gray , styles.textSize_12]}>{ popInfo.name.substr(0,20) }</Text>
@@ -344,9 +348,9 @@ function ResultBySearch({navigation,route}) {
                                                                 />
                                                             </View>
                                                         </View>
-                                                        <View style={[styles.directionRow , styles.marginTop_5]}>
+                                                        <View style={[styles.directionRow , styles.marginTop_5 , {flex:1}]}>
                                                             <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_13 , styles.text_darkRed , {marginRight:5}]} />
-                                                            <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12, {lineHeight:20}]}>{ popInfo.location }</Text>
+                                                            <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12, {lineHeight:20 , flex:1}]}>{ popInfo.address }</Text>
                                                         </View>
                                                     </View>
                                                 </TouchableOpacity>

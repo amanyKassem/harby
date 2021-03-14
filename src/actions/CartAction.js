@@ -176,7 +176,7 @@ export const deleteProduct = (cart_id, id, lang, token , navigation) => {
 }
 
 
-export const sendOrder = ( lang, provider_id, latitude , longitude , address , payment_type, shipping_price , coupon , time, token , navigation) => {
+export const sendOrder = ( lang, provider_id, latitude , longitude , address , payment_type, shipping_price , coupon , time , way_to_deliver , friend_name , friend_phone, token , navigation) => {
     return async (dispatch,) => {
 
 
@@ -184,7 +184,7 @@ export const sendOrder = ( lang, provider_id, latitude , longitude , address , p
             method      : 'POST',
             url         : CONST.url + 'send-order',
             params      : {lang},
-            data        : {provider_id, latitude , longitude , address , payment_type , shipping_price , coupon, time},
+            data        : {provider_id, latitude , longitude , address , payment_type , shipping_price , coupon, time , way_to_deliver, friend_name , friend_phone},
             headers     : {Authorization: 'Bearer ' + token}
 
         }).then(response => {

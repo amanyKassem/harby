@@ -153,7 +153,7 @@ function BasketDetails({navigation,route}) {
 
                             {
                                 token ?
-                                    <TouchableOpacity onPress={() => navigation.navigate('orderData' , {type:cartDetails.provider.type , provider_id:cartDetails.provider.id , coupon})} style={[styles.mstrdaBtn , styles.Width_90 , styles.SelfCenter  , styles.marginTop_40 , styles.marginBottom_25]}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('orderData' , {type:cartDetails.provider.type , provider_id:cartDetails.provider.id , coupon , providerAddress:cartDetails.provider.address, coordinates:cartDetails.provider.coordinates})} style={[styles.mstrdaBtn , styles.Width_90 , styles.SelfCenter  , styles.marginTop_40 , styles.marginBottom_25]}>
                                         <Text style={[styles.textBold , styles.text_White , styles.textSize_15]}>{ i18n.t('confirm') }</Text>
                                     </TouchableOpacity>
                                     :

@@ -94,7 +94,7 @@ function NewLocation({navigation,route}) {
 
                             places.map((place, i) => {
                                 return (
-                                    <TouchableOpacity onPress={() => navigation.navigate('home', { latitude: place.latitude , longitude:place.longitude })} style={[styles.directionRowSpace , styles.paddingVertical_15 , {borderBottomWidth:1 , borderBottomColor:'#ddd'}]}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('home', { latitude: place.latitude , longitude:place.longitude , locFrom:'newLoc' })} style={[styles.directionRowSpace , styles.paddingVertical_15 , {borderBottomWidth:1 , borderBottomColor:'#ddd'}]}>
 
                                         <View style={[styles.directionRow , {flex:1}]}>
                                             <Image source={require('../../assets/images/circle_location.png')} style={[styles.icon12 , {marginRight:7}]} resizeMode='contain' />

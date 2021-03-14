@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {View, Text, Image, TouchableOpacity, Dimensions, FlatList, ActivityIndicator} from "react-native";
+import {View, Text, Image, TouchableOpacity, Dimensions, FlatList, ActivityIndicator , Vibration} from "react-native";
 import {Container, Content, Icon, Input} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from "../../locale/i18n";
@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getBanners , getCategories , getCartCount} from '../actions';
 import Header from '../common/Header';
 import COLORS from "../consts/colors";
+import { Notifications } from 'expo';
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
@@ -42,6 +43,25 @@ function Home({navigation,route}) {
 
         return unsubscribe;
     }, [navigation , bannersLoader , categoriesLoader]);
+
+
+    useEffect(() => {
+        Notifications.addListener(
+            _handleNotification
+        );
+    }, []);
+
+    const _handleNotification = async (notification) => {
+        Vibration.vibrate();
+        let notificationId = await Notifications.presentLocalNotificationAsync({
+            title: notification.data.title,
+            body: notification.data.body,
+            ios: {
+                sound: true,
+                _displayInForeground: true
+            }
+        });
+    };
 
     function renderLoader(){
         if (screenLoader){
