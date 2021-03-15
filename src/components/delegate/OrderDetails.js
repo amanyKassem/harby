@@ -163,7 +163,7 @@ function OrderDetails({navigation,route}) {
                                                     <Text style={[styles.textRegular , styles.text_gray , styles.textSize_12 , styles.alignStart , styles.marginBottom_5 , {lineHeight:20}]}>{orderDetails.provider.name}</Text>
                                                     <View style={[styles.directionRow , styles.marginBottom_5 , {flex:1}]}>
                                                         <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_12 , styles.text_darkRed , {marginRight:5}]} />
-                                                        <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12, {lineHeight:20}]}>{orderDetails.provider.address}</Text>
+                                                        <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12 , styles.writingDir, {lineHeight:20}]}>{orderDetails.provider.address}</Text>
                                                     </View>
                                                     <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12 , styles.alignStart]}>{orderDetails.provider.phone}</Text>
                                                 </View>
@@ -263,6 +263,36 @@ function OrderDetails({navigation,route}) {
                                             <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('payMethod') }</Text>
                                         </View>
                                         <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.payment_text}</Text>
+
+                                        <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                            <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('deliverWay') }</Text>
+                                        </View>
+                                        <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.way_to_deliver_text}</Text>
+
+                                        {
+                                            orderDetails.friend_name ?
+                                                <>
+                                                    <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                                        <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('friendName') }</Text>
+                                                    </View>
+                                                    <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.friend_name}</Text>
+                                                </>
+                                                :
+                                                null
+                                        }
+
+                                        {
+                                            orderDetails.friend_phone ?
+                                                <>
+                                                    <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                                        <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('friendPhone') }</Text>
+                                                    </View>
+                                                    <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.friend_phone}</Text>
+                                                </>
+                                                :
+                                                null
+                                        }
+
                                         <View style={[styles.bg_light_gray ,styles.paddingHorizontal_20 ,  styles.directionRow  , styles.height_45]}>
                                             <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('deliveryDetails') }</Text>
                                         </View>

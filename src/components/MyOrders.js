@@ -84,7 +84,7 @@ function MyOrders({navigation,route}) {
                 <View style={[styles.directionRow , {flex:1}]}>
                     <Image source={{uri:image}} style={[styles.icon60 , styles.Radius_7]} resizeMode={'cover'} />
                     <View style={[styles.paddingHorizontal_10 , {flex:1}]}>
-                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.marginBottom_5 , styles.alignStart , {lineHeight:20}]}>{ name}</Text>
+                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_14 , styles.marginBottom_5 , styles.alignStart , {lineHeight:20}]}>{name}</Text>
                         <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_14 , styles.alignStart]}>{ date }</Text>
                     </View>
                 </View>

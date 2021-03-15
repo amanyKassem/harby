@@ -28,7 +28,7 @@ function Profile({navigation,route}) {
     const lang = useSelector(state => state.lang.lang);
     const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const user = useSelector(state =>  state.auth.user ? state.auth.user.data : {});
-    const [active, setActive] = useState(1);
+    const [active, setActive] = useState(0);
 
     const userData = useSelector(state => state.profile.user);
     const userDataLoader = useSelector(state => state.profile.loader);
@@ -80,7 +80,7 @@ function Profile({navigation,route}) {
     const dispatch = useDispatch();
 
     function fetchData(){
-        setActive(1);
+        setActive(0);
         setScreenLoader(true);
         dispatch(profile(lang, token)).then(() => {setScreenLoader(false)});
     }
@@ -216,7 +216,7 @@ function Profile({navigation,route}) {
                 duration    : 3000,
                 textStyle   : {
                     color       : "white",
-                    fontFamily  : 'cairo',
+                    fontFamily  : 'flatRegular',
                     textAlign   : 'center'
                 }
             });
@@ -228,7 +228,7 @@ function Profile({navigation,route}) {
                 duration    : 3000,
                 textStyle   : {
                     color       : "white",
-                    fontFamily  : 'cairo',
+                    fontFamily  : 'flatRegular',
                     textAlign   : 'center'
                 }
             });
@@ -261,9 +261,7 @@ function Profile({navigation,route}) {
                             />
                         </View>
                     </View>
-                    <View style={[styles.directionRow , styles.marginTop_5]}>
-                        <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12, {lineHeight:20}]}>{ desc }</Text>
-                    </View>
+                    <Text style={[styles.textRegular , styles.text_midGray , styles.marginTop_5, styles.textSize_12 , styles.writingDir, {lineHeight:20}]}>{ desc }</Text>
                 </View>
             </View>
         );
@@ -422,9 +420,16 @@ function Profile({navigation,route}) {
                                                 />
                                             </Item>
 
-                                            <TouchableOpacity onPress={attachToggleModal} style={[styles.alignStart]}>
-                                                <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_15 , styles.marginBottom_5]}>{ i18n.t('attachment') }</Text>
-                                            </TouchableOpacity>
+                                            {
+                                                userData && userData.delegate.attachments ?
+                                                    <TouchableOpacity onPress={attachToggleModal} style={[styles.alignStart]}>
+                                                        <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_15 , styles.marginBottom_5]}>{ i18n.t('attachment') }</Text>
+                                                    </TouchableOpacity>
+                                                    :
+                                                    null
+                                            }
+
+
 
                                         </Form>
                                     </KeyboardAvoidingView>

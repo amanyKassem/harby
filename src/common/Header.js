@@ -78,9 +78,9 @@ function Header({navigation , title , cartCount , onToggleFavorite , filteration
                     title !== i18n.t('selectLoc') && filteration ?
                         <View style={[styles.directionRow]}>
 
-                            <TouchableOpacity onPress={() => toggleFilter()} >
-                                <Image source={require('../../assets/images/filter.png')} style={[styles.icon20 , styles.transform]} resizeMode={'contain'} />
-                            </TouchableOpacity>
+                            {/*<TouchableOpacity onPress={() => toggleFilter()} >*/}
+                            {/*    <Image source={require('../../assets/images/filter.png')} style={[styles.icon20 , styles.transform]} resizeMode={'contain'} />*/}
+                            {/*</TouchableOpacity>*/}
 
                             <TouchableOpacity onPress={() => navigation.goBack()} style={{marginLeft:10}} >
                                 <Image source={require('../../assets/images/arrow_left.png')} style={[styles.icon20 , styles.transform]} resizeMode={'contain'} />

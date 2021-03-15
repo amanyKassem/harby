@@ -9,6 +9,7 @@ import Header from '../../common/Header';
 import COLORS from "../../consts/colors";
 import Communications from 'react-native-communications';
 import {useIsFocused} from "@react-navigation/native";
+import Modal from "react-native-modal";
 
 const height = Dimensions.get('window').height;
 const isIOS = Platform.OS === 'ios';
@@ -20,11 +21,19 @@ function NormalOrderDetails({navigation,route}) {
     const orderDetails = useSelector(state => state.orders.orderDetails);
     const [screenLoader , setScreenLoader ] = useState(false);
     const [isUpdateSubmitted, setIsUpdateSubmitted] = useState(false);
+    const [extras , setExtras ] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const id = route.params.id;
 
     const dispatch = useDispatch();
     const isFocused = useIsFocused();
+
+    const [showModal, setShowModal] = useState(false);
+
+    function toggleModal (proExtras) {
+        setShowModal(!showModal);
+        setExtras(proExtras)
+    };
 
     function fetchData(){
         setScreenLoader(true)
@@ -61,8 +70,8 @@ function NormalOrderDetails({navigation,route}) {
         }
 
         return (
-            <TouchableOpacity onPress={onCancel} style={[styles.mstrdaBtn , styles.bg_gray , styles.marginTop_10  , styles.marginBottom_35 , styles.flexCenter , styles.Width_90]}>
-                <Text style={[styles.textBold , styles.text_White , styles.textSize_15]}>{ i18n.t('refuseOrder') }</Text>
+            <TouchableOpacity onPress={onCancel} style={[styles.mstrdaBtn , styles.bg_yellow , styles.marginTop_10  , styles.marginBottom_35 , styles.flexCenter , styles.Width_90]}>
+                <Text style={[styles.textBold , styles.text_darkRed , styles.textSize_15]}>{ i18n.t('refuseOrder') }</Text>
             </TouchableOpacity>
         );
 
@@ -130,7 +139,7 @@ function NormalOrderDetails({navigation,route}) {
                                                     <Text style={[styles.textRegular , styles.text_gray , styles.textSize_12 , styles.alignStart , styles.marginBottom_5 , {lineHeight:20}]}>{orderDetails.provider.name}</Text>
                                                     <View style={[styles.directionRow , styles.marginBottom_5 , {flex:1}]}>
                                                         <Icon type={'MaterialIcons'} name={'location-on'} style={[styles.textSize_12 , styles.text_darkRed , {marginRight:5}]} />
-                                                        <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12, {lineHeight:20}]}>{orderDetails.provider.address}</Text>
+                                                        <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12 , styles.writingDir, {lineHeight:20}]}>{orderDetails.provider.address}</Text>
                                                     </View>
                                                     <Text style={[styles.textRegular , styles.text_midGray , styles.textSize_12 , styles.alignStart]}>{orderDetails.provider.phone}</Text>
                                                 </View>
@@ -157,7 +166,20 @@ function NormalOrderDetails({navigation,route}) {
                                         orderDetails.products.map((pro, i) => {
                                             return (
                                                 <View key={i} style={[styles.borderGray ,styles.paddingHorizontal_20 , styles.paddingVertical_10 , styles.marginBottom_5 , styles.directionRowSpace]}>
-                                                    <Text style={[styles.textRegular , styles.text_gray , styles.textSize_13 , styles.writingDir , {flex:1}]}>{pro.name}</Text>
+                                                    <View style={[styles.directionRow]}>
+                                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_12 , styles.alignStart , {marginRight:5}]}>{pro.quantity} {pro.name}</Text>
+
+                                                        {
+                                                            pro.extras && ( pro.extras).length > 0?
+                                                                <TouchableOpacity onPress={() => toggleModal(pro.extras)}>
+                                                                    <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_12 , styles.alignStart]}>( {i18n.t('details') } )</Text>
+                                                                </TouchableOpacity>
+                                                                :
+                                                                null
+                                                        }
+
+
+                                                    </View>
                                                     <View style={{borderLeftWidth:1 , borderColor:'#ddd' , paddingLeft:10 , marginLeft:10 }}>
                                                         <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_13]}>{pro.price} {i18n.t('RS') }</Text>
                                                     </View>
@@ -172,6 +194,34 @@ function NormalOrderDetails({navigation,route}) {
                                     <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('payMethod') }</Text>
                                 </View>
                                 <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.payment_text}</Text>
+                                <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                    <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('deliverWay') }</Text>
+                                </View>
+                                <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.way_to_deliver_text}</Text>
+
+                                {
+                                    orderDetails.friend_name ?
+                                        <>
+                                            <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                                <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('friendName') }</Text>
+                                            </View>
+                                            <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.friend_name}</Text>
+                                        </>
+                                        :
+                                        null
+                                }
+
+                                {
+                                    orderDetails.friend_phone ?
+                                        <>
+                                            <View style={[ styles.bg_light_gray ,styles.paddingHorizontal_20 , styles.directionRow  , styles.height_45]}>
+                                                <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('friendPhone') }</Text>
+                                            </View>
+                                            <Text style={[styles.textRegular,styles.paddingHorizontal_20 , styles.marginVertical_15 , styles.text_gray , styles.textSize_14 ,styles.alignStart]}>{orderDetails.friend_phone}</Text>
+                                        </>
+                                        :
+                                        null
+                                }
                                 <View style={[styles.bg_light_gray ,styles.paddingHorizontal_20 ,  styles.directionRow  , styles.height_45]}>
                                     <Text style={[styles.textBold , styles.text_gray , styles.textSize_14]}>{i18n.t('total') }</Text>
                                 </View>
@@ -250,6 +300,37 @@ function NormalOrderDetails({navigation,route}) {
 
             </Content>
 
+            <Modal
+                onBackdropPress                 ={() => setShowModal(false)}
+                onBackButtonPress               = {() => setShowModal(false)}
+                isVisible                       = {showModal}
+                style                           = {styles.bgModel}
+                avoidKeyboard                    = {true}
+            >
+
+                <View style={[styles.bg_White, styles.overHidden, styles.Width_100, {borderTopStartRadius:5 , borderTopEndRadius:5}]}>
+
+                    <View style={[styles.bg_darkRed , styles.Width_100 , styles.paddingVertical_15 , styles.paddingHorizontal_20]}>
+                        <Text style={[styles.textBold , styles.text_White , styles.textSize_15 , styles.alignStart]}>{ i18n.t('details') }</Text>
+                    </View>
+
+                    <View style={[styles.paddingHorizontal_20 , styles.paddingVertical_20]}>
+                        {
+                            extras  && extras.map((extra, i) => {
+                                return (
+                                    <View style={[styles.directionRowSpace]}>
+                                        <Text style={[styles.textRegular , styles.text_gray , styles.textSize_15 , styles.marginBottom_10 , styles.alignStart]}>- {extra.name}</Text>
+                                        <Text style={[styles.textRegular , styles.text_darkRed , styles.textSize_14 , styles.marginBottom_10 , styles.alignStart]}>{extra.price} { i18n.t('RS') }</Text>
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
+
+
+                </View>
+
+            </Modal>
 
         </Container>
     );

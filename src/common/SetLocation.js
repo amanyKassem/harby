@@ -159,7 +159,7 @@ function SetLocation({navigation,route}) {
                     <Input style={[styles.mapInput]} placeholder={i18n.t('chooseLocation')} value={search} onChangeText={(search) => setSearch(search)} onSubmitEditing={() => onSearch()} />
                 </View>
 
-                <View style={[styles.bgFullWidth ,styles.bg_White, styles.Width_100 , styles.marginTop_40 , {paddingBottom:35}]}>
+                <View style={[styles.bgFullWidth ,styles.bg_White, styles.Width_100 , styles.marginTop_40 , {paddingBottom:35 , overflow:'hidden'}]}>
 
                     <View>
 

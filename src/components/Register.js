@@ -69,7 +69,7 @@ function Register({navigation , route}) {
                 duration    : 3000,
                 textStyle   	: {
                     color       	: "white",
-                    fontFamily  	: 'cairo',
+                    fontFamily  	: 'flatRegular',
                     textAlign   	: 'center'
                 }
             });

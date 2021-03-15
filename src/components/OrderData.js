@@ -210,13 +210,13 @@ function OrderData({navigation,route}) {
                                 <RNPickerSelect
                                     style={{
                                         inputAndroid: {
-                                            fontFamily: 'cairo',
+                                            fontFamily: 'flatRegular',
                                             color:COLORS.gray,
                                             textAlign           : I18nManager.isRTL ? 'right' : 'left',
                                             fontSize            : 14,
                                         },
                                         inputIOS: {
-                                            fontFamily: 'cairo',
+                                            fontFamily: 'flatRegular',
                                             color:COLORS.gray,
                                             alignSelf:'flex-start',
                                             textAlign           : I18nManager.isRTL ? 'right' : 'left',
