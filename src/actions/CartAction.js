@@ -2,18 +2,19 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { Toast } from 'native-base'
 import CONST from '../consts';
+import i18n from "../../locale/i18n";
 
 
 export const getCart = (lang) => {
     return async (dispatch) => {
         await AsyncStorage.getItem('deviceID').then(device_id => {
             axios({
-                url         : CONST.url + 'cart',
-                method      : 'POST',
-                params      : {lang},
-                data        : { device_id }
+                url: CONST.url + 'cart',
+                method: 'POST',
+                params: { lang },
+                data: { device_id }
             }).then(response => {
-                dispatch({type: 'getCart', payload: response.data});
+                dispatch({ type: 'getCart', payload: response.data });
             });
         })
 
@@ -22,67 +23,88 @@ export const getCart = (lang) => {
 
 
 
-export const getCartCount = (lang , token) => {
+export const getCartCount = (lang, token) => {
     return async (dispatch) => {
         await AsyncStorage.getItem('deviceID').then(device_id => {
             axios({
-                url         : CONST.url + 'cart-count',
-                method      : 'POST',
-                params      : {lang},
-                data        : { device_id },
-                headers     : {Authorization: 'Bearer ' + token},
+                url: CONST.url + 'cart-count',
+                method: 'POST',
+                params: { lang },
+                data: { device_id },
+                headers: { Authorization: 'Bearer ' + token },
             }).then(response => {
-                dispatch({type: 'getCartCount', payload: response.data});
+                dispatch({ type: 'getCartCount', payload: response.data });
             });
         })
 
     }
 };
 
-export const getCartDetails = (lang , id, coupon , token) => {
+export const getCartDetails = (lang, id, coupon, token) => {
     return async (dispatch) => {
         await AsyncStorage.getItem('deviceID').then(device_id => {
             axios({
-                url         : CONST.url + 'cart-details',
-                method      : 'POST',
-                params      : {lang},
-                data        : { id, coupon, device_id},
-                headers: {Authorization: 'Bearer ' + token}
+                url: CONST.url + 'cart-details',
+                method: 'POST',
+                params: { lang },
+                data: { id, coupon, device_id },
+                headers: { Authorization: 'Bearer ' + token }
             }).then(response => {
-                dispatch({type: 'getCartDetails', payload: response.data});
+                dispatch({ type: 'getCartDetails', payload: response.data });
             });
         })
 
     }
 };
 
-export const addToCart = (lang , product_id , quantity ,price ,extras , token , navigation , orderTime) => {
-    return async (dispatch) => {
-        await AsyncStorage.getItem('deviceID').then(device_id => {
-            axios({
-                url         : CONST.url + 'add-cart',
-                method      : 'POST',
-                params      : {lang},
-                data        : { device_id , product_id , quantity ,price ,extras},
-                headers     : {Authorization: 'Bearer ' + token}
-            }).then(response => {
-                if (response.data.success && orderTime === 'now'){
-                    navigation.navigate('basket');
-                }
+export const addToCart = (lang, product_id, quantity, price, extras, token, navigation, orderTime) => {
+    return async (dispatch, getState) => {
+        const { user } = getState().auth
+        console.log(user);
+        if (user != null) {
 
-                Toast.show({
-                    text        	: response.data.message,
-                    type			: response.data.success ? "success" : "danger",
-                    duration    	: 3000,
-                    textStyle   	: {
-                        color       	: "white",
-                        fontFamily  	: 'flatRegular',
-                        textAlign   	: 'center'
+            await AsyncStorage.getItem('deviceID').then(device_id => {
+                axios({
+                    url: CONST.url + 'add-cart',
+                    method: 'POST',
+                    params: { lang },
+                    data: { device_id, product_id, quantity, price, extras },
+                    headers: { Authorization: 'Bearer ' + token }
+                }).then(response => {
+                    if (response.data.success && orderTime === 'now') {
+                        navigation.navigate('basket');
                     }
-                });
 
+                    Toast.show({
+                        text: response.data.message,
+                        type: response.data.success ? "success" : "danger",
+                        duration: 3000,
+                        textStyle: {
+                            color: "white",
+                            fontFamily: 'flatRegular',
+                            textAlign: 'center'
+                        }
+                    });
+
+                });
+            })
+
+        }
+        else {
+            navigation.navigate('login');
+
+            Toast.show({
+                text: i18n.t('loginFirst'),
+                type: "danger",
+                duration: 3000,
+                position: 'bottom',
+                textStyle: {
+                    color: "white",
+                    fontFamily: 'flatRegular',
+                    textAlign: 'center'
+                }
             });
-        })
+        }
 
     }
 };
@@ -90,21 +112,21 @@ export const addToCart = (lang , product_id , quantity ,price ,extras , token , 
 export const ChangeProductQuantity = (type, cart_id, id, lang, token) => {
     return async (dispatch) => {
         await axios({
-            method      : 'POST',
-            url         : CONST.url + 'change-quantity',
-            params      : {lang},
-            data        : { type, cart_id, id},
-            headers     : {Authorization: 'Bearer ' + token}
+            method: 'POST',
+            url: CONST.url + 'change-quantity',
+            params: { lang },
+            data: { type, cart_id, id },
+            headers: { Authorization: 'Bearer ' + token }
 
         }).then(response => {
             Toast.show({
-                text        	: response.data.message,
-                type			: response.data.success ? "success" : "danger",
-                duration    	: 3000,
-                textStyle   	: {
-                    color       	: "white",
-                    fontFamily  	: 'flatRegular',
-                    textAlign   	: 'center'
+                text: response.data.message,
+                type: response.data.success ? "success" : "danger",
+                duration: 3000,
+                textStyle: {
+                    color: "white",
+                    fontFamily: 'flatRegular',
+                    textAlign: 'center'
                 }
             });
 
@@ -118,23 +140,23 @@ export const ValidationCoupon = (coupon, lang, token) => {
         await axios({
             method: 'POST',
             url: CONST.url + 'validate/coupon',
-            params      : {lang},
-            data        : {coupon},
-            headers     : {Authorization: 'Bearer ' + token}
+            params: { lang },
+            data: { coupon },
+            headers: { Authorization: 'Bearer ' + token }
 
         }).then((response) => {
             if (response.data.success) {
-                dispatch({type: 'ValidationCoupon', payload: response.data});
+                dispatch({ type: 'ValidationCoupon', payload: response.data });
             }
 
             Toast.show({
-                text        	: response.data.message,
-                type			: response.data.success ? "success" : "danger",
-                duration    	: 3000,
-                textStyle   	: {
-                    color       	: "white",
-                    fontFamily  	: 'flatRegular',
-                    textAlign   	: 'center'
+                text: response.data.message,
+                type: response.data.success ? "success" : "danger",
+                duration: 3000,
+                textStyle: {
+                    color: "white",
+                    fontFamily: 'flatRegular',
+                    textAlign: 'center'
                 }
             });
 
@@ -143,20 +165,20 @@ export const ValidationCoupon = (coupon, lang, token) => {
 }
 
 
-export const deleteProduct = (cart_id, id, lang, token , navigation) => {
+export const deleteProduct = (cart_id, id, lang, token, navigation) => {
     return async (dispatch,) => {
 
 
         await axios({
-            method      : 'POST',
-            url         : CONST.url + 'delete-cart-item',
-            params      : {lang},
-            data        : {cart_id, id},
-            headers     : {Authorization: 'Bearer ' + token}
+            method: 'POST',
+            url: CONST.url + 'delete-cart-item',
+            params: { lang },
+            data: { cart_id, id },
+            headers: { Authorization: 'Bearer ' + token }
 
         }).then(response => {
 
-            if (response.data.success && (response.data.data.products).length == 0 ){
+            if (response.data.success && (response.data.data.products).length == 0) {
                 navigation.navigate('basket');
             }
 
@@ -176,20 +198,20 @@ export const deleteProduct = (cart_id, id, lang, token , navigation) => {
 }
 
 
-export const sendOrder = ( lang, provider_id, latitude , longitude , address , payment_type, shipping_price , coupon , time , way_to_deliver , friend_name , friend_phone, token , navigation) => {
+export const sendOrder = (lang, provider_id, latitude, longitude, address, payment_type, shipping_price, coupon, time, way_to_deliver, friend_name, friend_phone, token, navigation) => {
     return async (dispatch,) => {
 
 
         await axios({
-            method      : 'POST',
-            url         : CONST.url + 'send-order',
-            params      : {lang},
-            data        : {provider_id, latitude , longitude , address , payment_type , shipping_price , coupon, time , way_to_deliver, friend_name , friend_phone},
-            headers     : {Authorization: 'Bearer ' + token}
+            method: 'POST',
+            url: CONST.url + 'send-order',
+            params: { lang },
+            data: { provider_id, latitude, longitude, address, payment_type, shipping_price, coupon, time, way_to_deliver, friend_name, friend_phone },
+            headers: { Authorization: 'Bearer ' + token }
 
         }).then(response => {
 
-            if (response.data.success){
+            if (response.data.success) {
                 navigation.navigate('orderSentSuccessfully');
             }
 
@@ -208,21 +230,21 @@ export const sendOrder = ( lang, provider_id, latitude , longitude , address , p
     }
 }
 
-export const getDeliveryPrice = ( lang, id, latitude , longitude , token ) => {
+export const getDeliveryPrice = (lang, id, latitude, longitude, token) => {
     return async (dispatch,) => {
 
 
         await axios({
-            method      : 'POST',
-            url         : CONST.url + 'delivery-price',
-            params      : {lang},
-            data        : {id, latitude , longitude},
-            headers     : {Authorization: 'Bearer ' + token}
+            method: 'POST',
+            url: CONST.url + 'delivery-price',
+            params: { lang },
+            data: { id, latitude, longitude },
+            headers: { Authorization: 'Bearer ' + token }
 
         }).then(response => {
 
             if (response.data.success) {
-                dispatch({type: 'getDeliveryPrice', payload: response.data});
+                dispatch({ type: 'getDeliveryPrice', payload: response.data });
             }
 
         })
