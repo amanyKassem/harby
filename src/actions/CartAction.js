@@ -5,14 +5,16 @@ import CONST from '../consts';
 import i18n from "../../locale/i18n";
 
 
-export const getCart = (lang) => {
+export const getCart = (lang, token) => {
     return async (dispatch) => {
         await AsyncStorage.getItem('deviceID').then(device_id => {
             axios({
                 url: CONST.url + 'cart',
                 method: 'POST',
                 params: { lang },
-                data: { device_id }
+                data: { device_id },
+                headers: { Authorization: 'Bearer ' + token },
+
             }).then(response => {
                 dispatch({ type: 'getCart', payload: response.data });
             });
