@@ -33,7 +33,7 @@ function ProductDetails({ navigation, route }) {
     const [count, setCount] = useState(1);
 
     const lang = useSelector(state => state.lang.lang);
-    const token = useSelector(state => state.auth.user.data.token);
+    const token = useSelector(state => state.auth.user ? state.auth.user.data.token : null);
     const product = useSelector(state => state.product.product);
     const productLoader = useSelector(state => state.product.loader);
     const [screenLoader, setScreenLoader] = useState(true);
